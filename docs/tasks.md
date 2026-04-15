@@ -19,8 +19,8 @@
 - [x] 初期状態を main に push（PR ベース検証の土台）
 
 ## Phase 2: Dependency Review Action 導入
-- [ ] `.github/workflows/dependency-review.yml` 作成（pull_request トリガー）
-- [ ] 設定オプション検討（`fail-on-severity`, `comment-summary-in-pr` など）
+- [x] `.github/workflows/dependency-review.yml` 作成（pull_request トリガー）
+- [x] 設定オプション検討（`fail-on-severity: moderate`, `comment-summary-in-pr: always`）
 - [ ] 動作確認用の作業ブランチを作成
 
 ## Phase 3: 動作確認（正常系）
