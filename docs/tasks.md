@@ -21,12 +21,17 @@
 ## Phase 2: Dependency Review Action 導入
 - [x] `.github/workflows/dependency-review.yml` 作成（pull_request トリガー）
 - [x] 設定オプション検討（`fail-on-severity: moderate`, `comment-summary-in-pr: always`）
-- [ ] 動作確認用の作業ブランチを作成
+- [x] 動作確認用の作業ブランチを作成（`verify/safe-dep-add`）
 
 ## Phase 3: 動作確認（正常系）
-- [ ] 無害な依存追加 PR を作成（例: よく使われる安全なバージョンの gem / npm package）
-- [ ] Action が成功することを確認
-- [ ] PR 上の表示（サマリコメント等）をスクショ取得
+- [x] 無害な依存追加 PR を作成（backend: rack-attack / frontend: clsx、PR #1）
+- [x] Action が成功することを確認（初回は Dependency graph 無効で失敗 → Dependabot security updates を有効化して再実行で pass）
+- [x] PR URL を記録（レポートにはスクショではなく PR リンクを記載する方針）
+  - 正常系 PR: https://github.com/agotoh/dependency_review_action_test/pull/1
+
+### メモ
+- 新規 public リポジトリでも Dependency Review Action 実行に必要な "Dependency graph" は自動有効化されない場合がある
+- `gh api -X PUT repos/{owner}/{repo}/vulnerability-alerts` または Settings → Code security で有効化が必要
 
 ## Phase 4: 動作確認（異常系）
 - [ ] 既知脆弱性のある Ruby gem を選定（例: 古い nokogiri 等）
@@ -35,29 +40,33 @@
 - [ ] 既知脆弱性のある npm package を選定（例: `lodash@4.17.15` 等）
 - [ ] 該当 package を `package.json` に追加した PR を作成
 - [ ] Action が検知・ブロックすることを確認
-- [ ] 各 PR のスクショ・ログ取得
+- [ ] 各 PR URL を記録（レポート記載用）
 
 ## Phase 5: 代替ツール軽検証（合計 1 人日目安。超過時は机上比較へ切替）
 ### bundler-audit
 - [ ] GitHub Actions に bundler-audit ジョブ追加
 - [ ] 脆弱 gem を含む PR で検知できるか確認
-- [ ] 結果をスクショ/ログで記録
+- [ ] 結果 PR URL / Actions run URL を記録
 
 ### Trivy
 - [ ] GitHub Actions に Trivy fs スキャンジョブ追加
 - [ ] Ruby / Node 双方の脆弱性を検知できるか確認
-- [ ] 結果をスクショ/ログで記録
+- [ ] 結果 PR URL / Actions run URL を記録
 
 ### Dependabot alerts
-- [ ] リポジトリ設定で Dependabot alerts を有効化
+- [x] リポジトリ設定で Dependabot alerts を有効化（Phase 3 で実施済み）
 - [ ] 既存の脆弱依存に対してアラートが発生するか確認
 - [ ] Dependabot security updates の PR 自動作成挙動を確認
-- [ ] 結果をスクショで記録
+- [ ] 結果 PR URL / alert URL を記録
 
 ## Phase 6: 比較・レポート作成
 - [ ] `docs/report.md` 作成
 - [ ] 比較表（導入難易度 / 検知力 / PR UX / ノイズ / 費用）を記載
-- [ ] 各ツールのスクショを添付
+- [ ] **各検証 PR の URL をレポートに記載**（スクショは取らず、PR リンクで参照）
+  - 正常系 PR: https://github.com/agotoh/dependency_review_action_test/pull/1
+  - 異常系 PR（Ruby）: （Phase 4 で取得）
+  - 異常系 PR（npm）: （Phase 4 で取得）
+  - bundler-audit / Trivy / Dependabot 検証 PR: （Phase 5 で取得）
 - [ ] Dependency Review Action を本番導入するかの所感・推奨を記載
 - [ ] main にマージしチーム共有
 
