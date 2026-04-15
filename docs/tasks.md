@@ -16,7 +16,7 @@
 - [x] `docker compose up` で frontend の起動確認（http://localhost:5173 → 200）
 - [x] backend / frontend / db がまとめて起動することを確認
 - [x] README に Docker での起動手順を記載
-- [ ] 初期状態を main に push（PR ベース検証の土台）
+- [x] 初期状態を main に push（PR ベース検証の土台）
 
 ## Phase 2: Dependency Review Action 導入
 - [ ] `.github/workflows/dependency-review.yml` 作成（pull_request トリガー）
