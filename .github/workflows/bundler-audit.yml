@@ -1,0 +1,38 @@
+name: bundler-audit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/backend/Gemfile"
+      - "apps/backend/Gemfile.lock"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  bundler-audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          working-directory: apps/backend
+          bundler-cache: true
+
+      - name: Install bundler-audit
+        run: gem install bundler-audit
+
+      - name: Update advisory DB and scan
+        run: |
+          bundle-audit update
+          bundle-audit check
