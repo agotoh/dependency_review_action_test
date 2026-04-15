@@ -15,9 +15,6 @@ permissions:
 jobs:
   bundler-audit:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/backend
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,13 +23,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-          working-directory: apps/backend
-          bundler-cache: true
 
       - name: Install bundler-audit
         run: gem install bundler-audit
 
-      - name: Update advisory DB and scan
+      - name: Update advisory DB and scan Gemfile.lock
+        working-directory: apps/backend
         run: |
           bundle-audit update
           bundle-audit check
