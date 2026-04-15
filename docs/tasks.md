@@ -40,17 +40,25 @@
 - [x] Action が検知・ブロックすることを確認（moderate severity で fail）
 - [x] 既知脆弱性のある npm package を選定（`lodash 4.17.15` / CVE-2019-10744, CVE-2020-8203）
 - [x] 該当 package を `package.json` に追加した PR を作成（PR #2 に同梱）
-- [ ] ~~Action が検知・ブロックすることを確認~~ → **検知されなかった**（下記メモ参照）
+- [x] Action が検知・ブロックすることを確認（rubyzip / lodash 双方検知、fail）
 - [x] 各 PR URL を記録
   - 異常系 PR: https://github.com/agotoh/dependency_review_action_test/pull/2
   - Actions run: https://github.com/agotoh/dependency_review_action_test/actions/runs/24439778731
 
-### ⚠️ 重要な発見: Dependency Review Action のカバレッジ差分
-- **rubyzip 1.2.2**: ✅ 検知（moderate, GHSA-5m2v-hc64-56h6）
-- **lodash 4.17.15**: ❌ 未検知（Dependency Review Action の脆弱性リストに出ず）
-  - 一方で `npm install` 実行時には `1 high severity vulnerability` と警告された
-  - → **Dependency Review Action は `npm audit` より検知範囲が狭い可能性がある**
-  - 本番導入前に検知差分の傾向を確認すべき（レポート Phase 6 に記載する）
+### 検知結果（Job Summary より）
+**apps/backend/Gemfile.lock**
+- `rubyzip 1.2.2` — Rubyzip denial of service（moderate）
+
+**apps/frontend/package-lock.json**
+- `lodash 4.17.15` — 複数の Advisory を検知
+  - Command Injection in lodash（high）
+  - Prototype Pollution in lodash（high）
+  - Code Injection via `_.template` imports key names（high）
+  - Regular Expression Denial of Service (ReDoS)（moderate）
+  - Prototype Pollution in `_.unset` / `_.omit`（moderate、2件）
+
+→ 合計 2 packages / 7 advisories を検知し、設定通り `fail-on-severity: moderate` で PR をブロック。
+OpenSSF Scorecard の警告も 25 件表示されており、依存の健全性評価も併せて確認可能。
 
 ## Phase 5: 代替ツール軽検証（合計 1 人日目安。超過時は机上比較へ切替）
 ### bundler-audit
