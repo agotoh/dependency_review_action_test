@@ -6,6 +6,10 @@ gem "rails", "~> 7.2.3", ">= 7.2.3.1"
 gem "sprockets-rails"
 # Use mysql as the database for Active Record
 gem "mysql2", "~> 0.5"
+# INTENTIONALLY VULNERABLE: pinned to an old version with a known CVE
+# (CVE-2018-1000544, "Zip Slip") to verify Dependency Review Action
+# detection. DO NOT copy to real apps.
+gem "rubyzip", "= 1.2.2"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
